@@ -1,4 +1,3 @@
-import { TodoManager } from "./TodoManager";
 
 export class Todo {
   #title;
@@ -7,10 +6,10 @@ export class Todo {
   #priority;
   #isDone;
 
-  constructor(title, description = "", dueDate, priority = "medium", isDone = false) {
+  constructor(title, dueDate, description = "", priority = "medium", isDone = false) {
     this.#title = title;
-    this.#description = description;
     this.#dueDate = dueDate;
+    this.#description = description;
     this.#priority = priority;
     this.#isDone = isDone;
   }

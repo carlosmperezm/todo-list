@@ -1,0 +1,28 @@
+@import 'variables.css';
+
+.todo-container {
+  display: flex;
+  justify-content: space-between;
+  background-color: #ddd;
+  height: 50px;
+  padding: 5px;
+}
+
+.title-container {
+  display: grid;
+  place-items: center;
+}
+
+
+.actions-container {
+  display: flex;
+  gap: 10px;
+}
+
+.action {
+  width: 30px;
+}
+
+.action:hover {
+  cursor: pointer;
+}
