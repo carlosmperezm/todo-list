@@ -1,0 +1,20 @@
+:root {
+  /*Red*/
+  --color1: #e63946;
+  /*Honeydew*/
+  --color2: #f1faee;
+  /*light Blue*/
+  --color3: #a8dadc;
+  /*Blue*/
+  --color4: #457b9d;
+  /*dark Blue*/
+  --color5: #1d3557;
+
+}
+
+@font-face {
+  font-family: 'Shadows';
+  src: url('assets/fonts/ShadowsIntoLight-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
