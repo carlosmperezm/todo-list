@@ -1,0 +1,48 @@
+@import "./variables.css";
+
+
+.form-background {
+  display: grid;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(2px);
+}
+
+.todo-form {
+  position: absolute;
+  background-color: var(--color2);
+  width: 500px;
+  place-self: center;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.priority-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.high-priority {
+  color: var(--color1);
+}
+
+.medium-priority {
+  color: var(--color4);
+}
+
+.low-priority {
+  color: var(--color5);
+}
+
+.todo-form button {
+  margin-top: 2rem;
+}
