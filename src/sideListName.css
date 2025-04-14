@@ -20,3 +20,7 @@
   cursor: pointer;
   background-color: var(--color4);
 }
+
+.list-name-container[data-active=true] {
+  background-color: var(--color4);
+}
