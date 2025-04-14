@@ -5,11 +5,18 @@ button:hover {
   cursor: pointer;
 }
 
+button {
+  font: inherit
+}
+
 body {
   background-color: var(--color4);
-  font-family: 'Times New Roman', Times, serif;
+  /* font-family: 'Times New Roman', Times, serif; */
+  font-family: Shadows;
   font-size: 1.5rem;
   margin: 0;
+  position: relative;
+  letter-spacing: 2px;
 }
 
 main {
