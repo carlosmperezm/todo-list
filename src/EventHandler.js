@@ -24,7 +24,6 @@ export class EventHandler {
     const todo = new Todo(title, description, dueDate);
     const currentListHTML = document.querySelector(".list-name-container[data-active=true]");
     const currentListObj = ListStorageController.getList(currentListHTML.name);
-    console.log("currentListObj", currentListObj)
     const currentList = TodoList.fromJSON(currentListObj);
 
 
