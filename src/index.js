@@ -15,6 +15,10 @@ import { ListStorageController } from "./ListStorageController.js";
 const mainPanel = document.querySelector(".main-panel");
 const sidePanel = document.querySelector(".side-panel");
 
+function removeButton(buttonId) {
+  const button = document.querySelector(`#${buttonId}`);
+  button.parentNode.removeChild(button);
+}
 
 function loadDefaultLists() {
   const personalList = new TodoList("Personal")
@@ -38,16 +42,24 @@ function loadDefaultLists() {
 }
 
 
-
-function loadButtons() {
-
-  const addTodoButton = createAddButton("Add Todo");
+function loadAddListButton() {
   const addListButton = createAddButton("Add List");
-
-  mainPanel.appendChild(addTodoButton);
+  addListButton.id = "addList";
   sidePanel.appendChild(addListButton);
+
 }
 
+function loadAddTodoButton() {
+  const addTodoButton = createAddButton("Add Todo");
+  addTodoButton.id = "addTodo";
+  mainPanel.appendChild(addTodoButton);
+
+  addTodoButton.addEventListener("click", () => {
+    const form = createTodoForm();
+
+    document.body.appendChild(form);
+  });
+}
 
 function removeAllTodosfromMainPanel() {
 
@@ -70,25 +82,28 @@ document.body.addEventListener("submit", (evt) => {
   EventHandler.createTodo(evt);
 
   removeAllTodosfromMainPanel();
+  removeButton("addTodo");
 
   EventHandler.loadAllTodos();
+  loadAddTodoButton();
 
 });
 
 
 
 loadDefaultLists();
-loadButtons();
+loadAddTodoButton();
+loadAddListButton();
 
 document.addEventListener("DOMContentLoaded", () => {
   EventHandler.loadAllTodos();
   console.log("Page Loaded");
 });
 
-const addTodoButton = mainPanel.querySelector(".add-button");
-addTodoButton.addEventListener("click", () => {
-  const form = createTodoForm();
-
-  document.body.appendChild(form);
-});
+// const addTodoButton = mainPanel.querySelector("#addTodo");
+// addTodoButton.addEventListener("click", () => {
+//   const form = createTodoForm();
+//
+//   document.body.appendChild(form);
+// });
 
