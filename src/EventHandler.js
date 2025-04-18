@@ -38,8 +38,8 @@ export class EventHandler {
 
   static loadAllTodos() {
     const currentListHTML = document.querySelector(".list-name-container[data-active=true]");
-    const currentListObj = ListStorageController.getList(currentListHTML.name);
-    console.log(currentListObj);
+    console.log("name", currentListHTML);
+    const currentListObj = ListStorageController.getList(currentListHTML.getAttribute("name"));
     const currentList = TodoList.fromJSON(currentListObj);
 
     currentListHTML.querySelector(".counter-container span").textContent = currentList.getAll().length;

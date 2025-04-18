@@ -4,7 +4,6 @@ export class TodoList {
   #todos = [];
 
   static fromJSON(obj) {
-    console.log("from method", obj);
     const name = obj.name;
     const active = obj.active;
     const todos = obj.todos;

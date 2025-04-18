@@ -9,6 +9,7 @@ export function createSideUIListName(todoList) {
   listNameContainer.classList.add("list-name-container")
   listNameContainer.dataset.active = todoList.active;
   listNameContainer.name = todoList.name;
+  listNameContainer.setAttribute("name", todoList.name);
 
   listName.textContent = todoList.name;
 
