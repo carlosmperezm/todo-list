@@ -2,9 +2,7 @@ import { Todo } from "./Todo";
 import { TodoList } from "./TodosList";
 import { ListStorageController } from "./ListStorageController";
 
-import { createUITodo } from "./createUITodo";
-import { createSideUIListName } from "./createSideUIListName";
-import { createTodoForm } from "./createTodoForm";
+import { DOMController } from "./DOMController";
 
 const mainPanel = document.querySelector('.main-panel');
 const sidePanel = document.querySelector(".side-panel");
@@ -38,7 +36,6 @@ export class EventHandler {
 
   static loadAllTodos() {
     const currentListHTML = document.querySelector(".list-name-container[data-active=true]");
-    console.log("name", currentListHTML);
     const currentListObj = ListStorageController.getList(currentListHTML.getAttribute("name"));
     const currentList = TodoList.fromJSON(currentListObj);
 
@@ -46,14 +43,15 @@ export class EventHandler {
 
     ListStorageController.getAllTodosFrom(currentList.name).forEach(todoJSON => {
       const todo = Todo.fromJSON(todoJSON);
-      const todoHTML = createUITodo(todo);
+      const todoHTML = DOMController.TodoManager.createTodo(todo);
       mainPanel.appendChild(todoHTML);
     })
   }
 
   static loadForm() {
-    const form = createTodoForm();
-    document.body.appendChild(form);
+    DOMController.TodoManager.loadForm();
+    // const form = DOMController.TodoManager.createTodoForm();
+    // document.body.appendChild(form);
 
   }
 

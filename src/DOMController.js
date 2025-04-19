@@ -1,17 +1,41 @@
-import { createSideUIListName } from "./createSideUIListName";
-import { createUITodo } from "./createUITodo";
-import { ListStorageController } from "./ListStorageController";
-import { Todo } from "./Todo";
-import { TodoList } from "./TodosList";
+import "./button.css"
+import "./sideListName.css"
+import plusIcon from "./assets/icons/plus.svg";
+
+import { DOMListManager } from "./DOMListManager";
+import { DOMTodoManager } from "./DOMTodoManager";
 
 export class DOMController {
-  static mainPanel = document.querySelector(".main-panel");
-  static sidePanel = document.querySelector(".side-panel");
+  static #mainPanel = document.querySelector(".main-panel");
+  static #sidePanel = document.querySelector(".side-panel");
 
+  static #ListManager = DOMListManager;
+  static #TodoManager = DOMTodoManager;
 
-  static removeAllTodosfromMainPanel() {
-    const allTodosHTML = document.querySelectorAll(".todo-container");
-    allTodosHTML.forEach(todo => DOMController.mainPanel.removeChild(todo));
+  static get mainPanel() {
+    return DOMController.#mainPanel;
+  }
+
+  static get sidePanel() {
+    return DOMController.#sidePanel;
+  }
+
+  static get ListManager() {
+    return DOMController.#ListManager;
+  }
+
+  static get TodoManager() {
+    return DOMController.#TodoManager;
+  }
+
+  static getAddTodoButton() {
+    const addTodoButton = DOMController.mainPanel.querySelector('#addTodo');
+    return addTodoButton;
+  }
+
+  static getAddListButton() {
+    const addListButton = DOMController.sidePanel.querySelector('#addList');
+    return addListButton;
   }
 
 
@@ -20,58 +44,35 @@ export class DOMController {
     button.parentNode.removeChild(button);
   }
 
-  static getList(listName) {
-    const list = document.querySelector(`.list-name-container[name="${listName}"]`);
-    return list;
+
+  static createAddButton(text) {
+    const button = document.createElement("button");
+    const icon = document.createElement("img");
+    const textContainer = document.createElement("span");
+
+    button.id = "".toLowerCase().replace(" ", "");
+    textContainer.textContent = text;
+    icon.src = plusIcon;
+
+    button.appendChild(icon);
+    button.appendChild(textContainer);
+    button.classList.add("add-button");
+
+    return button;
   }
 
-  static getActiveList() {
-    const activeListHTML = document.querySelector(".list-name-container[data-active=true]");
-    return activeListHTML;
+  static loadAddListButton() {
+    const addListButton = DOMController.createAddButton("Add List");
+    addListButton.id = "addList";
+    DOMController.sidePanel.appendChild(addListButton);
   }
 
-  static setActiveList(listHTML) {
-    listHTML.dataset.active = true;
-  }
-
-
-  static toggleActive(listHTML) {
-    //TODO: fix
-
-    const active = listHTML.dataset.active === "true";
-
-    listHTML.dataset.active = active ? false : true;
-  }
-
-
-  static loadList(name) {
-    const listObj = ListStorageController.getList(name);
-    const list = TodoList.fromJSON(listObj);
-    const listHTML = createSideUIListName(list);
-
-    DOMController.sidePanel.appendChild(listHTML);
-  }
-
-
-  static loadAllTodosFromActiveList() {
-    const activeListHTML = DOMController.getActiveList();
-    const activeListObj = ListStorageController.getList(activeListHTML.name);
-    const activeList = TodoList.fromJSON(activeListObj);
-    const counterHTML = DOMController.getCounterFromList(activeList.name);
-    counterHTML.textContent = activeList.getAll().length;
-
-    ListStorageController.getAllTodosFrom(activeList.name).forEach(todoJSON => {
-      const todo = Todo.fromJSON(todoJSON);
-      const todoHTML = createUITodo(todo);
-      DOMController.mainPanel.appendChild(todoHTML);
-    })
+  static loadAddTodoButton() {
+    const addTodoButton = DOMController.createAddButton("Add Todo");
+    addTodoButton.id = "addTodo";
+    DOMController.mainPanel.appendChild(addTodoButton);
 
   }
 
-  static getCounterFromList(listName) {
-    const listHTML = document.querySelector(`.list-name-container[name=${listName}`);
-    const counterHTML = listHTML.querySelector(".counter-container span");
-    return counterHTML;
-  }
 
 }

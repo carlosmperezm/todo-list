@@ -1,43 +1,13 @@
 import "./styles.css";
 
-
-import { Todo } from "./Todo.js";
 import { TodoList } from "./TodosList.js";
-
-import { createUITodo } from "./createUITodo.js";
-import { createSideUIListName } from "./createSideUIListName.js";
-import { createAddButton } from "./createButton.js";
-import { createTodoForm } from "./createTodoForm.js";
-
 import { EventHandler } from "./EventHandler.js";
 import { ListStorageController } from "./ListStorageController.js";
+import { DOMController } from "./DOMController.js";
 
 const mainPanel = document.querySelector(".main-panel");
 const sidePanel = document.querySelector(".side-panel");
 
-function removeButton(buttonId) {
-  const button = document.querySelector(`#${buttonId}`);
-  button.parentNode.removeChild(button);
-}
-
-function loadList(name, active = false) {
-  const listObj = ListStorageController.getList(name) | undefined;
-  let list;
-
-  if (!listObj) {
-    list = new TodoList(name);
-    ListStorageController.saveList(list.name, list);
-  }
-  else {
-    list = TodoList.fromJSON(listObj);
-  }
-  list.active = active;
-  const listHTML = createSideUIListName(list);
-  listHTML.dataset.active = active;
-  sidePanel.appendChild(listHTML);
-
-  return listHTML;
-}
 
 function loadDefaultLists() {
   const personalList = new TodoList("Personal")
@@ -50,9 +20,9 @@ function loadDefaultLists() {
   ListStorageController.saveList(workList.name, workList);
   ListStorageController.saveList(schoolList.name, schoolList);
 
-  const personalListHTML = createSideUIListName(personalList);
-  const workListHTML = createSideUIListName(workList);
-  const schoolListHTML = createSideUIListName(schoolList);
+  const personalListHTML = DOMController.createSideListElement(personalList); //createSideUIListName(personalList);
+  const workListHTML = DOMController.createSideListElement(workList); //createSideUIListName(workList);
+  const schoolListHTML = DOMController.createSideListElement(schoolList);//createSideUIListName(schoolList);
 
 
   sidePanel.appendChild(personalListHTML);
@@ -62,9 +32,8 @@ function loadDefaultLists() {
 
 
 function loadAddListButton() {
-  const addListButton = createAddButton("Add List");
-  addListButton.id = "addList";
-  sidePanel.appendChild(addListButton);
+  DOMController.loadAddListButton("Add List");
+  const addListButton = DOMController.getAddListButton();
 
   addListButton.addEventListener("click", () => {
     // TODO:
@@ -73,22 +42,14 @@ function loadAddListButton() {
 }
 
 function loadAddTodoButton() {
-  const addTodoButton = createAddButton("Add Todo");
-  addTodoButton.id = "addTodo";
-  mainPanel.appendChild(addTodoButton);
+  DOMController.loadAddTodoButton("Add Todo");
+  const addTodoButton = DOMController.getAddTodoButton();
 
   addTodoButton.addEventListener("click", () => {
-    const form = createTodoForm();
+    const form = DOMController.TodoManager.createTodoForm();
 
     document.body.appendChild(form);
   });
-}
-
-function removeAllTodosfromMainPanel() {
-
-  const allTodosHTML = document.querySelectorAll(".todo-container");
-
-  allTodosHTML.forEach(todo => mainPanel.removeChild(todo));
 }
 
 
@@ -98,22 +59,18 @@ document.body.addEventListener("click", (evt) => {
     document.body.removeChild(form);
   }
 
+
   if (evt.target.className === "list-name-container") {
-    console.log("clicked");
-    const activeListHTML = document.querySelector(".list-name-container[data-active=true]");
-    const activeListObj = ListStorageController.getList(activeListHTML.name);
-    const activeList = TodoList.fromJSON(activeListObj);
-    activeListHTML.dataset.active = false;
-    activeList.active = false;
-    ListStorageController.saveList(activeList.name, activeList);
+
+    const activeListHTML = DOMController.ListManager.getActiveList();
+    ListStorageController.toggleActive(activeListHTML.name);
+    DOMController.ListManager.toggleActive(activeListHTML);
 
 
-    const targetListObj = ListStorageController.getList(evt.target.name);
-    const targetList = TodoList.fromJSON(targetListObj);
-    evt.target.dataset.active = true;
-    targetList.active = true;
-    ListStorageController.saveList(targetList.name, targetList);
-    console.log("clicked2");
+    ListStorageController.setActiveList(evt.target.name);
+    ListStorageController.setInactiveAllListBut(evt.target.name);
+    DOMController.ListManager.toggleActive(evt.target);
+
     //TODO:
 
     reloadMainContent()
@@ -123,9 +80,9 @@ document.body.addEventListener("click", (evt) => {
 })
 
 function reloadMainContent() {
-  removeAllTodosfromMainPanel();
-  removeButton("addTodo");
-  EventHandler.loadAllTodos();
+  DOMController.ListManager.removeAllTodosfromMainPanel();
+  DOMController.removeButton("addTodo");
+  DOMController.ListManager.loadAllTodosFromActiveList();
   loadAddTodoButton();
 }
 
@@ -135,12 +92,13 @@ function reloadSideContent() {
 
     sidePanel.removeChild(listHTML);
   });
-  removeButton("addList");
+  DOMController.removeButton("addList");
+  // removeButton("addList");
 
+  DOMController.ListManager.loadList("Personal");
+  DOMController.ListManager.loadList("Work");
+  DOMController.ListManager.loadList("School");
 
-  loadList("Personal");
-  loadList("Work")
-  loadList("School")
   loadAddListButton();
 }
 
@@ -154,28 +112,24 @@ document.body.addEventListener("submit", (evt) => {
 
 
 
-// loadDefaultLists();
+ListStorageController.setInactiveList("Work");
+ListStorageController.setInactiveList("School");
 
-loadList("Personal", true)
-loadList("Work")
-loadList("School")
+DOMController.ListManager.loadList("Personal");
+DOMController.ListManager.loadList("Work");
+DOMController.ListManager.loadList("School");
 loadAddTodoButton();
 loadAddListButton();
 
 
-const activeListHTML = document.querySelector('.list-name-container[name="Personal"]');
-// activeListHTML.dataset.active = true;
-const activeListObj = ListStorageController.getList(activeListHTML.name);
-const activeList = TodoList.fromJSON(activeListObj);
-activeList.active = true;
-ListStorageController.saveList(activeList.name, activeList);
-// loadList("Personal");
+const personalList = DOMController.ListManager.getList("Personal")
+DOMController.ListManager.setActiveList(personalList);
+ListStorageController.setActiveList(personalList.name);
 
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  EventHandler.loadAllTodos();
-  console.log("Page Loaded");
+  DOMController.ListManager.loadAllTodosFromActiveList();
 });
 
 
