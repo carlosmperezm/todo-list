@@ -3,17 +3,40 @@ import { Todo } from "./Todo";
 import { createUITodo } from "./createUITodo";
 
 import { ListStorageController } from "./ListStorageController";
+import { DOMController } from "./DOMController";
 
 
 export class DOMListManager {
   static #sidePanel = document.querySelector(".side-panel");
   static #mainPanel = document.querySelector(".main-panel");
+  static #form = DOMListManager.#createForm();
 
   static getList(listName) {
     const list = document.querySelector(`.list-name-container[name="${listName}"]`);
     return list;
   }
 
+  static get form() {
+    return DOMListManager.#form;
+  }
+
+  static #createForm() {
+    const form = document.createElement("form");
+    form.classList.add("create-list-form");
+
+    const listName = document.createElement("input")
+    listName.placeholder = "List Name";
+    listName.name = "listName";
+
+    const submitButton = document.createElement("button");
+    submitButton.textContent = "Create";
+
+    form.appendChild(listName);
+    form.appendChild(submitButton);
+
+    return form;
+
+  }
 
   static getActiveList() {
     const activeListHTML = document.querySelector(".list-name-container[data-active=true]");
@@ -93,4 +116,42 @@ export class DOMListManager {
 
     return listNameContainer;
   }
+
+  static setCounterOfTodos(listName, numberOfTodos) {
+    DOMListManager.getCounterFromList(listName).textContent = numberOfTodos;
+  }
+
+  static loadAllTodosFromActiveList() {
+    const activeListHTML = DOMListManager.getActiveList();
+    const activeListObj = ListStorageController.getList(activeListHTML.name);
+    const activeList = TodoList.fromJSON(activeListObj);
+
+    DOMListManager.setCounterOfTodos(activeList.name, activeList.getAll().length);
+
+    ListStorageController.getAllTodosFrom(activeList.name).forEach(todoJSON => {
+      const todo = Todo.fromJSON(todoJSON);
+      const todoHTML = DOMController.TodoManager.createTodo(todo);
+      DOMListManager.#mainPanel.appendChild(todoHTML);
+
+    })
+
+  }
+
+  static loadForm() {
+    DOMListManager.#sidePanel.appendChild(DOMListManager.form);
+  }
+
+  static getFormData() {
+    const listName = DOMListManager.form.querySelector("input").value;
+
+    return listName;
+  }
+
+  static removeForm() {
+    // DOMListManager.form.querySelector("input").value = "";
+    DOMListManager.form.parentElement.removeChild(DOMListManager.form);
+    DOMListManager.#form = DOMListManager.#createForm();
+    // DOMListManager.#sidePanel.removeChild(DOMListManager.form);
+  }
+
 }

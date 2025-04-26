@@ -4,8 +4,9 @@ import { TodoList } from "./TodosList.js";
 import { EventHandler } from "./EventHandler.js";
 import { ListStorageController } from "./ListStorageController.js";
 import { DOMController } from "./DOMController.js";
+import { DOMTodoManager } from "./DOMTodoManager.js";
+import { DOMListManager } from "./DOMListManager.js";
 
-const mainPanel = document.querySelector(".main-panel");
 const sidePanel = document.querySelector(".side-panel");
 
 
@@ -20,9 +21,9 @@ function loadDefaultLists() {
   ListStorageController.saveList(workList.name, workList);
   ListStorageController.saveList(schoolList.name, schoolList);
 
-  const personalListHTML = DOMController.createSideListElement(personalList); //createSideUIListName(personalList);
-  const workListHTML = DOMController.createSideListElement(workList); //createSideUIListName(workList);
-  const schoolListHTML = DOMController.createSideListElement(schoolList);//createSideUIListName(schoolList);
+  const personalListHTML = DOMController.createSideListElement(personalList);
+  const workListHTML = DOMController.createSideListElement(workList);
+  const schoolListHTML = DOMController.createSideListElement(schoolList);
 
 
   sidePanel.appendChild(personalListHTML);
@@ -37,19 +38,38 @@ function loadAddListButton() {
 
   addListButton.addEventListener("click", () => {
     // TODO:
+
+    // 1. Show list form to create the list
+    DOMController.ListManager.loadForm();
+    const form = DOMController.ListManager.form;
+    // 2. Get the data 
+    let listName;
+
+    form.addEventListener("submit", evt => {
+      evt.preventDefault();
+      listName = DOMController.ListManager.getFormData();
+
+      // 3. Create the list
+      const list = new TodoList(listName);
+      // 4. call the list Storage Controller to save the list 
+      ListStorageController.saveList(list.name, list);
+      // 5. Show the list in the DOM
+      DOMListManager.loadList(list.name);
+      // 6. Remove the form from the screejn
+      DOMListManager.removeForm();
+    });
+
+
   });
 
 }
 
 function loadAddTodoButton() {
   DOMController.loadAddTodoButton("Add Todo");
-  const addTodoButton = DOMController.getAddTodoButton();
+  DOMController.getAddTodoButton().addEventListener("click", () => {
+    DOMController.TodoManager.loadForm();
+  })
 
-  addTodoButton.addEventListener("click", () => {
-    const form = DOMController.TodoManager.createTodoForm();
-
-    document.body.appendChild(form);
-  });
 }
 
 
@@ -73,18 +93,15 @@ document.body.addEventListener("click", (evt) => {
 
     //TODO:
 
-    reloadMainContent()
-    // reloadSideContent();
+    DOMController.reloadMainContent();
+
+    DOMController.getAddTodoButton().addEventListener("click", () => {
+      DOMController.TodoManager.loadForm();
+    })
 
   }
 })
 
-function reloadMainContent() {
-  DOMController.ListManager.removeAllTodosfromMainPanel();
-  DOMController.removeButton("addTodo");
-  DOMController.ListManager.loadAllTodosFromActiveList();
-  loadAddTodoButton();
-}
 
 function reloadSideContent() {
   const allListsHTML = document.querySelectorAll(".list-name-container");
@@ -102,13 +119,35 @@ function reloadSideContent() {
   loadAddListButton();
 }
 
-
-document.body.addEventListener("submit", (evt) => {
-
-  EventHandler.createTodo(evt);
-  reloadMainContent();
-
-});
+//TODO: Fix: the event "submit" is being pulled from all the
+// forms. We don't want that
+//
+// DOMController.TodoManager.form.addEventListener("submit", (evt) => {
+//
+//   EventHandler.retrieveTodoData(evt);
+//
+//   DOMController.reloadMainContent();
+//
+//   DOMController.getAddTodoButton().addEventListener("click", () => {
+//     DOMController.TodoManager.loadForm();
+//   })
+// });
+//
+// This is the one we had before 
+// document.body.addEventListener("submit", (evt) => {
+//
+//   if (evt.target.className === ".form-background") {
+//
+//     EventHandler.retrieveTodoData(evt);
+//
+//     DOMController.reloadMainContent();
+//
+//     DOMController.getAddTodoButton().addEventListener("click", () => {
+//       DOMController.TodoManager.loadForm();
+//     })
+//   }
+//
+// });
 
 
 
@@ -118,7 +157,11 @@ ListStorageController.setInactiveList("School");
 DOMController.ListManager.loadList("Personal");
 DOMController.ListManager.loadList("Work");
 DOMController.ListManager.loadList("School");
-loadAddTodoButton();
+DOMController.loadAddTodoButton("Add Todo");
+
+DOMController.getAddTodoButton().addEventListener("click", () => {
+  DOMController.TodoManager.loadForm();
+})
 loadAddListButton();
 
 
@@ -132,4 +175,8 @@ document.addEventListener("DOMContentLoaded", () => {
   DOMController.ListManager.loadAllTodosFromActiveList();
 });
 
+DOMController.TodoManager.deleteButton.addEventListener("click", evt => {
+  // TODO::Set up the delete functionality
+  // DOMController.TodoManager.removeTodo(, evt.dataset.index)
+})
 
