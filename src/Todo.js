@@ -7,12 +7,12 @@ export class Todo {
   #isDone;
 
 
-  static fromJSON(jsonObject) {
-    const title = jsonObject.title;
-    const description = jsonObject.description;
-    const dueDate = jsonObject.dueDate;
-    const priority = jsonObject.piority;
-    const isDone = jsonObject.isDone;
+  static from(obj) {
+    const title = obj.title;
+    const description = obj.description;
+    const dueDate = obj.dueDate;
+    const priority = obj.piority;
+    const isDone = obj.isDone;
 
     return new Todo(title, description, dueDate, priority, isDone);
   }

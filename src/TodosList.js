@@ -3,7 +3,7 @@ export class TodoList {
   #active = false;
   #todos = [];
 
-  static fromJSON(obj) {
+  static from(obj) {
     const name = obj.name;
     const active = obj.active;
     const todos = obj.todos;
