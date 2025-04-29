@@ -8,6 +8,8 @@ import trashSvg from "./assets/icons/trash.svg";
 import editSvg from "./assets/icons/edit.svg";
 import { ListStorageController } from "./ListStorageController";
 import { DOMController } from "./DOMController";
+import { Todo } from "./Todo";
+import { TodoList } from "./TodosList";
 
 
 
@@ -103,9 +105,25 @@ export class DOMTodoManager {
   }
 
   static loadForm() {
-    // const form = DOMTodoManager.createTodoForm();
-    const form = DOMTodoManager.form;
-    document.body.appendChild(form);
+    // Get the form
+    const formContainer = DOMTodoManager.form;
+    const form = formContainer.querySelector("form");
+
+    // Set form listener to get the data
+    // form.addEventListener("submit", (evt) => {
+    //   evt.preventDefault();
+    // Get the data from the form and work on it
+    // DOMTodoManager.retrieveTodoData(form);
+    // // clean the form before delete 
+    // DOMTodoManager.cleanForm()
+    // DOMTodoManager.removeForm();
+    // // After the data is precessed reload the main content
+    // DOMController.reloadMainContent();
+    // });
+    //
+
+    // Load the form in the DOM
+    document.body.appendChild(formContainer);
 
   }
 
@@ -178,12 +196,48 @@ export class DOMTodoManager {
     DOMController.reloadMainContent();
   }
 
-  static removeForm() {
+  static cleanForm() {
     DOMTodoManager.form.querySelectorAll("input").forEach(input => {
       input.value = "";
     })
-    document.body.removeChild(DOMTodoManager.form);
+  }
+
+  static removeForm() {
+    const form = DOMTodoManager.form;
+
+    console.log(form === null, form);
+
+    if (form) {
+      console.log("removing form", form)
+      form.parentNode.removeChild(form);
+    }
     // DOMTodoManager.#form = DOMTodoManager.createTodoForm();
+
+  }
+
+  static retrieveTodoData() {
+    // const formBackground = document.querySelector(".form-background");
+
+    // Get the data
+    const title = document.querySelector("#todoTitle").value;
+    const description = document.querySelector("#todoDescription").value;
+    const dueDate = document.querySelector("#dueDate").value;
+    // const piority = document.querySelector("#todo");
+
+    // Create a new todo with the data
+    const todo = new Todo(title, description, dueDate);
+    // Get the current list where user want to add the todo
+    const currentListHTML = DOMController.ListManager.getActiveList();
+    // Transform the list into a TodoList type
+    const currentListObj = ListStorageController.getList(currentListHTML.name);
+    const currentList = TodoList.from(currentListObj);
+    // Add the new todo to the list
+    currentList.add(todo);
+    // Save the list in the storage
+    ListStorageController.saveList(currentList.name, currentList);
+    // Update the todo counter of that list
+    DOMController.ListManager.getCounterFromList(currentList.name, currentList.getAll().length);
+
   }
 
 }

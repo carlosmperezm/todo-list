@@ -5,7 +5,6 @@ import plusIcon from "./assets/icons/plus.svg";
 import { DOMListManager } from "./DOMListManager";
 import { DOMTodoManager } from "./DOMTodoManager";
 import { ListStorageController } from "./ListStorageController";
-import { EventHandler } from "./EventHandler";
 
 export class DOMController {
   static #mainPanel = document.querySelector(".main-panel");
@@ -13,8 +12,6 @@ export class DOMController {
 
   static #ListManager = DOMListManager;
   static #TodoManager = DOMTodoManager;
-
-  static EventHandler = EventHandler;
 
 
   static get mainPanel() {
@@ -75,15 +72,28 @@ export class DOMController {
   static loadAddTodoButton() {
     const addTodoButton = DOMController.createAddButton("Add Todo");
     addTodoButton.id = "addTodo";
+
+    // Add an event listener to the button each time is add it to the DOM
+    // addTodoButton.addEventListener("click", () =>
+    //   DOMController.TodoManager.loadForm())
+
     DOMController.mainPanel.appendChild(addTodoButton);
 
   }
 
   static reloadMainContent() {
+    // Remove all todos
     DOMController.ListManager.removeAllTodosfromMainPanel();
+    // Remove the button
     DOMController.removeButton("addTodo");
+    // Load all todos
     DOMController.ListManager.loadAllTodosFromActiveList();
+    // Load the button again
     DOMController.loadAddTodoButton();
+
+    DOMController.getAddTodoButton().addEventListener("click", () =>
+      DOMController.TodoManager.loadForm())
+
   }
 
   static reloadSideContent() {
@@ -100,9 +110,13 @@ export class DOMController {
     ListStorageController.getAllLists().forEach(list => {
       DOMController.ListManager.loadList(list.name);
     })
-
+    //4. Load the button back
     DOMController.loadAddListButton();
 
+    DOMController.getAddListButton().addEventListener("click", () =>
+      DOMController.ListManager.loadForm())
+
+    console.log("side content loaded")
   }
 
 

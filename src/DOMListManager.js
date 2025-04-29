@@ -142,6 +142,22 @@ export class DOMListManager {
   }
 
   static loadForm() {
+    DOMListManager.form.addEventListener("submit", e => {
+      e.preventDefault();
+      // 2. Get the data 
+      const listName = DOMController.ListManager.getFormData();
+      // 3. Create the list
+      const list = new TodoList(listName);
+      // 4. call the list Storage Controller to save the list 
+      ListStorageController.saveList(list.name, list);
+      // 5. Show the list in the DOM
+      DOMController.ListManager.loadList(list.name);
+      // 6. Remove the form from the screejn
+      DOMController.ListManager.removeForm();
+
+      DOMController.reloadSideContent();
+    });
+
     DOMListManager.#sidePanel.appendChild(DOMListManager.form);
   }
 

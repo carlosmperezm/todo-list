@@ -5,53 +5,9 @@ import { ListStorageController } from "./ListStorageController.js";
 import { DOMController } from "./DOMController.js";
 
 
-DOMController.TodoManager.form.addEventListener("click", (evt) => {
-  // Check for the event on the background of the form only
-  // Because clicks in inputs bubble up to the entire form
-  if (evt.target.className === "form-background")
-    DOMController.TodoManager.removeForm();
-})
 
-
-
-//TODO: Fix: the event "submit" is being pulled from all the
-// forms. We don't want that
-//
-// DOMController.TodoManager.form.addEventListener("submit", (evt) => {
-//
-//   EventHandler.retrieveTodoData(evt);
-//
-//   DOMController.reloadMainContent();
-//
-//   DOMController.getAddTodoButton().addEventListener("click", () => {
-//     DOMController.TodoManager.loadForm();
-//   })
-// });
-//
-// This is the one we had before 
-// document.body.addEventListener("submit", (evt) => {
-//
-//   if (evt.target.className === ".form-background") {
-//
-//     EventHandler.retrieveTodoData(evt);
-//
-//     DOMController.reloadMainContent();
-//
-//     DOMController.getAddTodoButton().addEventListener("click", () => {
-//       DOMController.TodoManager.loadForm();
-//     })
-//   }
-//
-// });
-
-
-
-DOMController.ListManager.loadList("Personal");
 
 DOMController.loadAddTodoButton("Add Todo");
-DOMController.getAddTodoButton().addEventListener("click", () => {
-  DOMController.TodoManager.loadForm();
-})
 
 
 DOMController.loadAddListButton("Add List");
@@ -68,10 +24,6 @@ DOMController.sidePanel.addEventListener("click", (evt) => {
     DOMController.ListManager.toggleActive(evt.target);
 
     DOMController.reloadMainContent();
-    // Must set the listener event in the new button created
-    DOMController.getAddTodoButton().addEventListener("click", () => {
-      DOMController.TodoManager.loadForm();
-    })
   }
 
 })
@@ -84,35 +36,40 @@ DOMController.sidePanel.addEventListener("click", (evt) => {
 // })
 
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => loadContent());
+
+
+function loadContent() {
   DOMController.reloadSideContent();
+  DOMController.reloadMainContent();
 
-  DOMController.ListManager.loadAllTodosFromActiveList();
+  const formBackground = DOMController.TodoManager.form
 
-  DOMController.getAddListButton().addEventListener("click", () => {
-    // 1. Show list form to create the list
-    DOMController.ListManager.loadForm();
+  formBackground.addEventListener("click", e => {
+    if (e.target.className === formBackground.className) {
+      DOMController.TodoManager.cleanForm();
+      DOMController.TodoManager.removeForm();
+    }
+  })
 
-    DOMController.ListManager.form.addEventListener("submit", evt => {
-      evt.preventDefault();
-      // 2. Get the data 
-      const listName = DOMController.ListManager.getFormData();
-      // 3. Create the list
-      const list = new TodoList(listName);
-      // 4. call the list Storage Controller to save the list 
-      ListStorageController.saveList(list.name, list);
-      // 5. Show the list in the DOM
-      DOMController.ListManager.loadList(list.name);
-      // 6. Remove the form from the screejn
-      DOMController.ListManager.removeForm();
+  formBackground.addEventListener("submit", (evt) => {
+    evt.preventDefault();
+    // Get the data from the form and work on it
+    DOMController.TodoManager.retrieveTodoData(formBackground);
+    // clean the form before delete 
+    DOMController.TodoManager.cleanForm();
+    DOMController.TodoManager.removeForm();
+    // // After the data is precessed reload the main content
+    DOMController.reloadMainContent();
+  });
 
-      DOMController.reloadSideContent();
-    });
-
-
-  },);
-});
+  // DOMController.getAddTodoButton().addEventListener("click", () =>
+  //   DOMController.TodoManager.loadForm())
 
 
+  // DOMController.getAddListButton().addEventListener("click", () =>
+  //   DOMController.ListManager.loadForm())
+
+}
 
 
