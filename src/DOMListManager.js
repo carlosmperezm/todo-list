@@ -58,10 +58,14 @@ export class DOMListManager {
 
   static loadList(name) {
     const listObj = ListStorageController.getList(name);
-    const list = TodoList.fromJSON(listObj);
+    const list = TodoList.from(listObj);
     const listHTML = DOMListManager.createSideListElement(list);
 
     DOMListManager.#sidePanel.appendChild(listHTML);
+  }
+
+  static loadAllLists() {
+    ListStorageController.getAllLists().forEach(list => DOMListManager.loadList(list.name));
   }
 
 
@@ -81,12 +85,12 @@ export class DOMListManager {
   static loadAllTodosFromActiveList() {
     const activeListHTML = DOMListManager.getActiveList();
     const activeListObj = ListStorageController.getList(activeListHTML.name);
-    const activeList = TodoList.fromJSON(activeListObj);
+    const activeList = TodoList.from(activeListObj);
     const counterHTML = DOMListManager.getCounterFromList(activeList.name);
     counterHTML.textContent = activeList.getAll().length;
 
     ListStorageController.getAllTodosFrom(activeList.name).forEach(todoJSON => {
-      const todo = Todo.fromJSON(todoJSON);
+      const todo = Todo.from(todoJSON);
       const todoHTML = createUITodo(todo);
       DOMListManager.#mainPanel.appendChild(todoHTML);
     })
@@ -124,12 +128,12 @@ export class DOMListManager {
   static loadAllTodosFromActiveList() {
     const activeListHTML = DOMListManager.getActiveList();
     const activeListObj = ListStorageController.getList(activeListHTML.name);
-    const activeList = TodoList.fromJSON(activeListObj);
+    const activeList = TodoList.from(activeListObj);
 
     DOMListManager.setCounterOfTodos(activeList.name, activeList.getAll().length);
 
     ListStorageController.getAllTodosFrom(activeList.name).forEach(todoJSON => {
-      const todo = Todo.fromJSON(todoJSON);
+      const todo = Todo.from(todoJSON);
       const todoHTML = DOMController.TodoManager.createTodo(todo);
       DOMListManager.#mainPanel.appendChild(todoHTML);
 
@@ -143,15 +147,12 @@ export class DOMListManager {
 
   static getFormData() {
     const listName = DOMListManager.form.querySelector("input").value;
-
     return listName;
   }
 
   static removeForm() {
-    // DOMListManager.form.querySelector("input").value = "";
     DOMListManager.form.parentElement.removeChild(DOMListManager.form);
     DOMListManager.#form = DOMListManager.#createForm();
-    // DOMListManager.#sidePanel.removeChild(DOMListManager.form);
   }
 
 }
