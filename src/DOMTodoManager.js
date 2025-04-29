@@ -6,12 +6,43 @@ import infoSvg from "./assets/icons/info.svg";
 import moveSvg from "./assets/icons/move.svg";
 import trashSvg from "./assets/icons/trash.svg";
 import editSvg from "./assets/icons/edit.svg";
+import { ListStorageController } from "./ListStorageController";
+import { DOMController } from "./DOMController";
 
 
 
 export class DOMTodoManager {
   static #mainPanel = document.querySelector(".main-panel");
   static #sidePanel = document.querySelector(".side-panel");
+  static #listStorage = ListStorageController;
+  static #form = DOMTodoManager.createTodoForm();
+
+  //Buttons
+  static #deleteButton = document.querySelector(".delete-action");
+  static #moveButton = document.querySelector(".move-action");
+  static #editButton = document.querySelector(".edit-action");
+  static #moreInfoButton = document.querySelector(".moreInfo-action");
+  static #checkButton = document.querySelector(".check-action");
+
+  static get deleteButton() {
+    return DOMTodoManager.#deleteButton;
+  }
+  static get moveButton() {
+    return DOMTodoManager.#moveButton;
+  }
+  static get editButton() {
+    return DOMTodoManager.#editButton;
+  }
+  static get moreInfoButton() {
+    return DOMTodoManager.#moreInfoButton;
+  }
+  static get checkButton() {
+    return DOMTodoManager.#checkButton;
+  }
+
+  static get form() {
+    return DOMTodoManager.#form;
+  }
 
   static createTodo(todo) {
     const todoContainer = document.createElement("div");
@@ -65,8 +96,17 @@ export class DOMTodoManager {
 
     todoContainer.appendChild(titleContainer);
     todoContainer.appendChild(actionsContainer);
+    todoContainer.dataset.index = 0;
+
 
     return todoContainer;
+  }
+
+  static loadForm() {
+    // const form = DOMTodoManager.createTodoForm();
+    const form = DOMTodoManager.form;
+    document.body.appendChild(form);
+
   }
 
   static createTodoForm() {
@@ -129,9 +169,22 @@ export class DOMTodoManager {
     form.appendChild(createTodoButton);
 
     formBackground.appendChild(form)
+
     return formBackground;
   }
 
+  static removeTodo(listName, todoIndex) {
+    DOMTodoManager.#listStorage.removeTodo(listName, todoIndex);
+    DOMController.reloadMainContent();
+  }
+
+  static removeForm() {
+    DOMTodoManager.form.querySelectorAll("input").forEach(input => {
+      input.value = "";
+    })
+    document.body.removeChild(DOMTodoManager.form);
+    // DOMTodoManager.#form = DOMTodoManager.createTodoForm();
+  }
 
 }
 

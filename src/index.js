@@ -4,32 +4,8 @@ import { TodoList } from "./TodosList.js";
 import { EventHandler } from "./EventHandler.js";
 import { ListStorageController } from "./ListStorageController.js";
 import { DOMController } from "./DOMController.js";
-import { DOMTodoManager } from "./DOMTodoManager.js";
-import { DOMListManager } from "./DOMListManager.js";
-
-const sidePanel = document.querySelector(".side-panel");
 
 
-function loadDefaultLists() {
-  const personalList = new TodoList("Personal")
-  const workList = new TodoList("Work");
-  const schoolList = new TodoList("School");
-
-  workList.active = true;
-
-  ListStorageController.saveList(personalList.name, personalList);
-  ListStorageController.saveList(workList.name, workList);
-  ListStorageController.saveList(schoolList.name, schoolList);
-
-  const personalListHTML = DOMController.createSideListElement(personalList);
-  const workListHTML = DOMController.createSideListElement(workList);
-  const schoolListHTML = DOMController.createSideListElement(schoolList);
-
-
-  sidePanel.appendChild(personalListHTML);
-  sidePanel.appendChild(workListHTML);
-  sidePanel.appendChild(schoolListHTML);
-}
 
 
 function loadAddListButton() {
@@ -37,7 +13,6 @@ function loadAddListButton() {
   const addListButton = DOMController.getAddListButton();
 
   addListButton.addEventListener("click", () => {
-    // TODO:
 
     // 1. Show list form to create the list
     DOMController.ListManager.loadForm();
@@ -54,9 +29,11 @@ function loadAddListButton() {
       // 4. call the list Storage Controller to save the list 
       ListStorageController.saveList(list.name, list);
       // 5. Show the list in the DOM
-      DOMListManager.loadList(list.name);
+      DOMController.ListManager.loadList(list.name);
       // 6. Remove the form from the screejn
-      DOMListManager.removeForm();
+      DOMController.ListManager.removeForm();
+
+      DOMController.reloadSideContent();
     });
 
 
@@ -64,20 +41,18 @@ function loadAddListButton() {
 
 }
 
-function loadAddTodoButton() {
-  DOMController.loadAddTodoButton("Add Todo");
-  DOMController.getAddTodoButton().addEventListener("click", () => {
-    DOMController.TodoManager.loadForm();
-  })
-
-}
-
+DOMController.TodoManager.form.addEventListener("click", (evt) => {
+  // Check for the event on the background of the form only
+  // Because clicks in inputs bubble up to the entire form
+  if (evt.target.className === "form-background")
+    DOMController.TodoManager.removeForm();
+})
 
 document.body.addEventListener("click", (evt) => {
-  if (evt.target.className === "form-background") {
-    const form = document.querySelector(".form-background");
-    document.body.removeChild(form);
-  }
+  // if (evt.target.className === "form-background") {
+  //   const form = document.querySelector(".form-background");
+  //   document.body.removeChild(form);
+  // }
 
 
   if (evt.target.className === "list-name-container") {
@@ -98,26 +73,19 @@ document.body.addEventListener("click", (evt) => {
     DOMController.getAddTodoButton().addEventListener("click", () => {
       DOMController.TodoManager.loadForm();
     })
+  }
+  console.log(evt.target);
+
+  if (evt.target.id == "addList") {
+    // TODO: this event is being trigged but
+    // we need it out of this scope.
+    console.log("waaa");
 
   }
+
 })
 
 
-function reloadSideContent() {
-  const allListsHTML = document.querySelectorAll(".list-name-container");
-  allListsHTML.forEach(listHTML => {
-
-    sidePanel.removeChild(listHTML);
-  });
-  DOMController.removeButton("addList");
-  // removeButton("addList");
-
-  DOMController.ListManager.loadList("Personal");
-  DOMController.ListManager.loadList("Work");
-  DOMController.ListManager.loadList("School");
-
-  loadAddListButton();
-}
 
 //TODO: Fix: the event "submit" is being pulled from all the
 // forms. We don't want that
@@ -151,32 +119,57 @@ function reloadSideContent() {
 
 
 
-ListStorageController.setInactiveList("Work");
-ListStorageController.setInactiveList("School");
-
 DOMController.ListManager.loadList("Personal");
-DOMController.ListManager.loadList("Work");
-DOMController.ListManager.loadList("School");
 DOMController.loadAddTodoButton("Add Todo");
+DOMController.loadAddListButton("Add List");
 
 DOMController.getAddTodoButton().addEventListener("click", () => {
+
   DOMController.TodoManager.loadForm();
 })
-loadAddListButton();
+
+console.log(DOMController.getAddListButton());
+const addListButton = document.querySelector("#addList");
+// const a = DOMController.getAddListButton();
+addListButton.addEventListener("click", () => {
+  console.log("wii");
+  //TODO: This event is not being trigged
+
+  // 1. Show list form to create the list
+  // DOMController.ListManager.loadForm();
+
+  // DOMController.ListManager.form.addEventListener("submit", evt => {
+  //   evt.preventDefault();
+  //   // 2. Get the data 
+  //   const listName = DOMController.ListManager.getFormData();
+  //   // 3. Create the list
+  //   const list = new TodoList(listName);
+  //   // 4. call the list Storage Controller to save the list 
+  //   ListStorageController.saveList(list.name, list);
+  //   // 5. Show the list in the DOM
+  //   DOMController.ListManager.loadList(list.name);
+  //   // 6. Remove the form from the screejn
+  //   DOMController.ListManager.removeForm();
+  //
+  //   DOMController.reloadSideContent();
+  // });
 
 
-const personalList = DOMController.ListManager.getList("Personal")
-DOMController.ListManager.setActiveList(personalList);
-ListStorageController.setActiveList(personalList.name);
+});
+
+
 
 
 
 document.addEventListener("DOMContentLoaded", () => {
+  DOMController.reloadSideContent();
   DOMController.ListManager.loadAllTodosFromActiveList();
 });
 
-DOMController.TodoManager.deleteButton.addEventListener("click", evt => {
-  // TODO::Set up the delete functionality
-  // DOMController.TodoManager.removeTodo(, evt.dataset.index)
-})
+
+
+// DOMController.TodoManager.deleteButton.addEventListener("click", evt => {
+// TODO::Set up the delete functionality
+// DOMController.TodoManager.removeTodo(, evt.dataset.index)
+// })
 
