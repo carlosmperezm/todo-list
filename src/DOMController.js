@@ -101,7 +101,7 @@ export class DOMController {
     const allListsHTML = document.querySelectorAll(".list-name-container");
     allListsHTML.forEach(listHTML => {
       DOMController.sidePanel.removeChild(listHTML);
-    });
+    })
 
     // 2. Remove the button 
     DOMController.removeButton("addList");

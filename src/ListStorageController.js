@@ -59,6 +59,16 @@ export class ListStorageController {
     }
   }
 
+  static get activeList() {
+    let activeList;
+    ListStorageController.getAllLists().forEach(list => {
+      if (list.active) {
+        activeList = list;
+      }
+    })
+    return activeList;
+  }
+
 
   static removeTodo(listName, todoIndex) {
     const list = TodoList.from(ListStorageController.getList(listName));

@@ -82,21 +82,6 @@ export class DOMListManager {
   }
 
 
-  static loadAllTodosFromActiveList() {
-    const activeListHTML = DOMListManager.getActiveList();
-    const activeListObj = ListStorageController.getList(activeListHTML.name);
-    const activeList = TodoList.from(activeListObj);
-    const counterHTML = DOMListManager.getCounterFromList(activeList.name);
-    counterHTML.textContent = activeList.getAll().length;
-
-    ListStorageController.getAllTodosFrom(activeList.name).forEach(todoJSON => {
-      const todo = Todo.from(todoJSON);
-      const todoHTML = createUITodo(todo);
-      DOMListManager.#mainPanel.appendChild(todoHTML);
-    })
-  }
-
-
   static createSideListElement(todoList) {
     const listNameContainer = document.createElement("div");
     const listName = document.createElement("span");
@@ -132,11 +117,13 @@ export class DOMListManager {
 
     DOMListManager.setCounterOfTodos(activeList.name, activeList.getAll().length);
 
+    let index = 0;
     ListStorageController.getAllTodosFrom(activeList.name).forEach(todoJSON => {
       const todo = Todo.from(todoJSON);
       const todoHTML = DOMController.TodoManager.createTodo(todo);
+      todoHTML.dataset.index = index;
+      index++;
       DOMListManager.#mainPanel.appendChild(todoHTML);
-
     })
 
   }

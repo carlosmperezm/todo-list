@@ -1,17 +1,11 @@
 import "./styles.css";
 
-import { TodoList } from "./TodosList.js";
 import { ListStorageController } from "./ListStorageController.js";
 import { DOMController } from "./DOMController.js";
 
 
-
-
 DOMController.loadAddTodoButton("Add Todo");
-
-
 DOMController.loadAddListButton("Add List");
-
 
 DOMController.sidePanel.addEventListener("click", (evt) => {
   if (evt.target.className === "list-name-container") {
@@ -29,29 +23,37 @@ DOMController.sidePanel.addEventListener("click", (evt) => {
 })
 
 
-
-// DOMController.TodoManager.deleteButton.addEventListener("click", evt => {
-// TODO::Set up the delete functionality
-// DOMController.TodoManager.removeTodo(, evt.dataset.index)
+// DOMController.TodoManager.actionButtons.deleteButton.addEventListener("click", e => {
+//   console.log(e.target);
+//   // TODO::Set up the delete functionality
+//   // DOMController.TodoManager.removeTodo(, evt.dataset.index)
 // })
 
 
 document.addEventListener("DOMContentLoaded", () => loadContent());
+
+const activeList = DOMController.ListManager.getActiveList();
+if (activeList === "null") {
+  ListStorageController.setActiveList("personal");
+  const personalHTMLList = DOMController.ListManager.getList("personal");
+  DOMController.ListManager.setActiveList(personalHTMLList);
+
+}
 
 
 function loadContent() {
   DOMController.reloadSideContent();
   DOMController.reloadMainContent();
 
-  const formBackground = DOMController.TodoManager.form
+  // DOMController.TodoManager.loadEvents();
 
+  const formBackground = DOMController.TodoManager.form
   formBackground.addEventListener("click", e => {
     if (e.target.className === formBackground.className) {
       DOMController.TodoManager.cleanForm();
       DOMController.TodoManager.removeForm();
     }
   })
-
   formBackground.addEventListener("submit", (evt) => {
     evt.preventDefault();
     // Get the data from the form and work on it
@@ -63,12 +65,6 @@ function loadContent() {
     DOMController.reloadMainContent();
   });
 
-  // DOMController.getAddTodoButton().addEventListener("click", () =>
-  //   DOMController.TodoManager.loadForm())
-
-
-  // DOMController.getAddListButton().addEventListener("click", () =>
-  //   DOMController.ListManager.loadForm())
 
 }
 

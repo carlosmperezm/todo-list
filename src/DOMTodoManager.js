@@ -6,10 +6,13 @@ import infoSvg from "./assets/icons/info.svg";
 import moveSvg from "./assets/icons/move.svg";
 import trashSvg from "./assets/icons/trash.svg";
 import editSvg from "./assets/icons/edit.svg";
+
 import { ListStorageController } from "./ListStorageController";
 import { DOMController } from "./DOMController";
 import { Todo } from "./Todo";
 import { TodoList } from "./TodosList";
+import { ActionButtonsManager } from "./DOMTodoActionButtons";
+
 
 
 
@@ -18,28 +21,14 @@ export class DOMTodoManager {
   static #sidePanel = document.querySelector(".side-panel");
   static #listStorage = ListStorageController;
   static #form = DOMTodoManager.createTodoForm();
+  static #actionButtons = ActionButtonsManager;
+  static #todo;
 
-  //Buttons
-  static #deleteButton = document.querySelector(".delete-action");
-  static #moveButton = document.querySelector(".move-action");
-  static #editButton = document.querySelector(".edit-action");
-  static #moreInfoButton = document.querySelector(".moreInfo-action");
-  static #checkButton = document.querySelector(".check-action");
+  static loadEvents = DOMTodoManager.actionButtons.loadEvents;
 
-  static get deleteButton() {
-    return DOMTodoManager.#deleteButton;
-  }
-  static get moveButton() {
-    return DOMTodoManager.#moveButton;
-  }
-  static get editButton() {
-    return DOMTodoManager.#editButton;
-  }
-  static get moreInfoButton() {
-    return DOMTodoManager.#moreInfoButton;
-  }
-  static get checkButton() {
-    return DOMTodoManager.#checkButton;
+
+  static get actionButtons() {
+    return DOMTodoManager.#actionButtons;
   }
 
   static get form() {
@@ -98,8 +87,11 @@ export class DOMTodoManager {
 
     todoContainer.appendChild(titleContainer);
     todoContainer.appendChild(actionsContainer);
-    todoContainer.dataset.index = 0;
+    todoContainer.dataset.index;
+    // todoContainer.dataset.title = title.textContent;
 
+
+    DOMTodoManager.loadEvents(todoContainer);
 
     return todoContainer;
   }
@@ -107,24 +99,8 @@ export class DOMTodoManager {
   static loadForm() {
     // Get the form
     const formContainer = DOMTodoManager.form;
-    const form = formContainer.querySelector("form");
-
-    // Set form listener to get the data
-    // form.addEventListener("submit", (evt) => {
-    //   evt.preventDefault();
-    // Get the data from the form and work on it
-    // DOMTodoManager.retrieveTodoData(form);
-    // // clean the form before delete 
-    // DOMTodoManager.cleanForm()
-    // DOMTodoManager.removeForm();
-    // // After the data is precessed reload the main content
-    // DOMController.reloadMainContent();
-    // });
-    //
-
     // Load the form in the DOM
     document.body.appendChild(formContainer);
-
   }
 
   static createTodoForm() {
@@ -211,12 +187,10 @@ export class DOMTodoManager {
       console.log("removing form", form)
       form.parentNode.removeChild(form);
     }
-    // DOMTodoManager.#form = DOMTodoManager.createTodoForm();
 
   }
 
   static retrieveTodoData() {
-    // const formBackground = document.querySelector(".form-background");
 
     // Get the data
     const title = document.querySelector("#todoTitle").value;
