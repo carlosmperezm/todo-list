@@ -23,29 +23,26 @@ DOMController.sidePanel.addEventListener("click", (evt) => {
 })
 
 
-// DOMController.TodoManager.actionButtons.deleteButton.addEventListener("click", e => {
-//   console.log(e.target);
-//   // TODO::Set up the delete functionality
-//   // DOMController.TodoManager.removeTodo(, evt.dataset.index)
-// })
+setTimeout(() => {
+
+  const activeList = DOMController.ListManager.getActiveList();
+  if (activeList === null) {
+    ListStorageController.setActiveList("personal");
+    const personalHTMLList = DOMController.ListManager.getList("personal");
+    DOMController.ListManager.setActiveList(personalHTMLList);
+
+  }
+}, 1000);
 
 
 document.addEventListener("DOMContentLoaded", () => loadContent());
 
-const activeList = DOMController.ListManager.getActiveList();
-if (activeList === "null") {
-  ListStorageController.setActiveList("personal");
-  const personalHTMLList = DOMController.ListManager.getList("personal");
-  DOMController.ListManager.setActiveList(personalHTMLList);
-
-}
 
 
 function loadContent() {
   DOMController.reloadSideContent();
   DOMController.reloadMainContent();
 
-  // DOMController.TodoManager.loadEvents();
 
   const formBackground = DOMController.TodoManager.form
   formBackground.addEventListener("click", e => {
