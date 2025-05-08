@@ -2,19 +2,19 @@
 
 ## ⚙️ To initialize the project
 
-1. Fork the project:
+### Fork the project
 
-   $ `git clone https://github.com/carlosmperezm/todo-list.git`
+$ `git clone https://github.com/carlosmperezm/todo-list.git`
 
-2. Install dependencies:
+### Install dependencies
 
-   $ `npm install`
+$ `npm install`
 
-   > [!WARNING]
-   >
-   > Make sure to have npm install
+> [!WARNING]
+>
+> Make sure to have npm install
 
-3. Initialize the project :
+### Initialize the project
 
 - Development mode
 
@@ -23,6 +23,8 @@
 - Deployment mode:
 
   $ `npm run build`
+
+---
 
 ## 📄 License
 
