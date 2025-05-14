@@ -3,44 +3,52 @@ import { ListStorageController } from "./ListStorageController";
 
 export class ActionButtonsManager {
 
-  static #deleteButton = document.querySelector(".delete-action");
-  static #moveButton = document.querySelector(".move-action");
-  static #editButton = document.querySelector(".edit-action");
-  static #moreInfoButton = document.querySelector(".moreInfo-action");
-  static #checkButton = document.querySelector(".check-action");
-
-  static get deleteButton() {
-    console.log("aaa");
-    return document.querySelector(".delete-action");
+  static getDeleteButton(todoHTML) {
+    return todoHTML.querySelector(".delete-action");
   }
-  static get moveButton() {
-    return ActionButtonsManager.#moveButton;
+  static getMoveButton(todoHTML) {
+    return todoHTML.querySelector(".delete-action");
   }
-  static get editButton() {
-    return ActionButtonsManager.#editButton;
+  static getEditButton(todoHTML) {
+    return todoHTML.querySelector(".delete-action");
   }
-  static get moreInfoButton() {
-    return ActionButtonsManager.#moreInfoButton;
+  static getMoreInfoButton(todoHTML) {
+    return todoHTML.querySelector(".moreInfo-action");
   }
-  static get checkButton() {
-    return ActionButtonsManager.#checkButton;
+  static getCheckButton(todoHTML) {
+    return todoHTML.querySelector(".check-action");
   }
 
-  static #deleteEvent(e) {
+  static #deleteEvent(event) {
     const currentList = ListStorageController.activeList;
-    const currentTodo = e.target.parentNode.parentNode;
-    const todoIndex = currentTodo.dataset.index;
+    const currentTodoHTML = event.target.parentNode.parentNode;
+    const todoIndex = currentTodoHTML.dataset.index;
 
     ListStorageController.removeTodo(currentList.name, todoIndex);
 
     DOMController.reloadMainContent();
   }
 
+  static #markDoneEvent(event) {
+    const currentList = ListStorageController.activeList;
+    const currentTodoHTML = event.target.parentNode.parentNode;
+    const todoIndex = currentTodoHTML.dataset.index;
+
+    ListStorageController.markDone(currentList.name, todoIndex);
+
+    DOMController.reloadMainContent();
+
+  }
 
 
-  static loadEvents(todo) {
-    const deleteButton = todo.querySelector(".delete-action");
+
+  static loadEvents(todoHTML) {
+    // Add Delete event
+    const deleteButton = ActionButtonsManager.getDeleteButton(todoHTML);
     deleteButton.addEventListener("click", ActionButtonsManager.#deleteEvent);
+
+    const checkButton = ActionButtonsManager.getCheckButton(todoHTML);
+    checkButton.addEventListener("click", ActionButtonsManager.#markDoneEvent);
 
   }
 

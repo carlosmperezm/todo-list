@@ -37,7 +37,7 @@ export class TodoList {
     this.#todos.splice(todoIndex, 1);
   }
   get(index) {
-    this.#todos.at(index);
+    return this.#todos.at(index);
   }
   getAll() {
     return this.#todos;

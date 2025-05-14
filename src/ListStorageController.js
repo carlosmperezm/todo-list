@@ -1,4 +1,5 @@
 import { TodoList } from "./TodosList";
+import { Todo } from "./Todo";
 
 export class ListStorageController {
 
@@ -76,6 +77,30 @@ export class ListStorageController {
     ListStorageController.saveList(list.name, list);
   }
 
+  static markDone(listName,todoIndex){
+    // get the list and parse it into a TodoList object
+    const list = TodoList.from(ListStorageController.getList(listName));
+
+    // get the todo
+    const todoObj = list.get(todoIndex) ;
+
+    // delete the todo from the list since i cant be changed
+    // instead we'll create a new one and add it to the end of the list
+    list.remove(todoIndex);
+
+    // create a new to-do object 
+    const todo = Todo.from(todoObj);
+
+    // swicht it to done or undone
+    todo.toggleDone();
+
+    // add to the current list were the other todo was deleted
+    list.add(todo);
+
+    // save the list
+    ListStorageController.saveList(list.name,list);
+
+  }
 
 
 }

@@ -87,8 +87,6 @@ export class DOMTodoManager {
 
     todoContainer.appendChild(titleContainer);
     todoContainer.appendChild(actionsContainer);
-    todoContainer.dataset.index;
-    // todoContainer.dataset.title = title.textContent;
 
 
     DOMTodoManager.loadEvents(todoContainer);

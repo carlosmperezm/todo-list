@@ -8,3 +8,8 @@
   background-color: var(--color4);
   color: var(--color2);
 }
+
+.todo-container[data-done="true"] {
+  text-decoration: line-through;
+  font-style: oblique;
+}

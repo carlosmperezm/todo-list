@@ -1,6 +1,5 @@
 import { TodoList } from "./TodosList";
 import { Todo } from "./Todo";
-import { createUITodo } from "./createUITodo";
 
 import { ListStorageController } from "./ListStorageController";
 import { DOMController } from "./DOMController";
@@ -122,6 +121,7 @@ export class DOMListManager {
       const todo = Todo.from(todoJSON);
       const todoHTML = DOMController.TodoManager.createTodo(todo);
       todoHTML.dataset.index = index;
+      todoHTML.dataset.done = todo.isDone;
       index++;
       DOMListManager.#mainPanel.appendChild(todoHTML);
     })

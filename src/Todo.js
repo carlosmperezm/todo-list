@@ -50,6 +50,7 @@ export class Todo {
   get isDone() {
     return this.#isDone;
   }
+
   toggleDone() {
     this.#isDone ? this.#isDone = false : this.#isDone = true;
   }
