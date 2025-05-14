@@ -139,7 +139,7 @@ export class DOMListManager {
       ListStorageController.saveList(list.name, list);
       // 5. Show the list in the DOM
       DOMController.ListManager.loadList(list.name);
-      // 6. Remove the form from the screejn
+      // 6. Remove the form from the screen
       DOMController.ListManager.removeForm();
 
       DOMController.reloadSideContent();
@@ -154,7 +154,8 @@ export class DOMListManager {
   }
 
   static removeForm() {
-    DOMListManager.form.parentElement.removeChild(DOMListManager.form);
+    const form = DOMListManager.form;
+    form.parentElement.removeChild(form);
     DOMListManager.#form = DOMListManager.#createForm();
   }
 

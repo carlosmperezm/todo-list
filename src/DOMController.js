@@ -73,10 +73,6 @@ export class DOMController {
     const addTodoButton = DOMController.createAddButton("Add Todo");
     addTodoButton.id = "addTodo";
 
-    // Add an event listener to the button each time is add it to the DOM
-    // addTodoButton.addEventListener("click", () =>
-    //   DOMController.TodoManager.loadForm())
-
     DOMController.mainPanel.appendChild(addTodoButton);
 
   }
@@ -94,6 +90,7 @@ export class DOMController {
     DOMController.getAddTodoButton().addEventListener("click", () =>
       DOMController.TodoManager.loadForm())
 
+    console.log("Main content reloaded")
   }
 
   static reloadSideContent() {
@@ -116,9 +113,35 @@ export class DOMController {
     DOMController.getAddListButton().addEventListener("click", () =>
       DOMController.ListManager.loadForm())
 
-    console.log("side content loaded")
+    console.log("Side content reloaded")
   }
 
+  static loadSideContent(){
+    // 3. Reload all the lists from the Storage
+    ListStorageController.getAllLists().forEach(list => {
+      DOMController.ListManager.loadList(list.name);
+    })
+    //4. Load the button back
+    DOMController.loadAddListButton();
+
+    DOMController.getAddListButton().addEventListener("click", () =>
+      DOMController.ListManager.loadForm())
+
+    console.log("Side content loaded")
+
+  }
+
+  static loadMainContent(){
+    // Load all todos
+    DOMController.ListManager.loadAllTodosFromActiveList();
+    // Load the button again
+    DOMController.loadAddTodoButton();
+
+    DOMController.getAddTodoButton().addEventListener("click", () =>
+      DOMController.TodoManager.loadForm())
+
+    console.log("Main content loaded")
+  }
 
 
   static loadDefaultLists() {
