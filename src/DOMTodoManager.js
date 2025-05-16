@@ -194,7 +194,7 @@ export class DOMTodoManager {
     // const piority = document.querySelector("#todo");
 
     // Create a new todo with the data
-    const todo = new Todo(title, description, dueDate);
+    const todo = new Todo(title, dueDate, description);
     // Get the current list where user want to add the todo
     const currentList = ListStorageController.activeList;
     // Before: const currentListHTML = DOMController.ListManager.getActiveList();
@@ -222,6 +222,10 @@ export class DOMTodoManager {
     const todoIsDone = todoObj.isDone;
     const todoPriority = todoObj.priority;
 
+    console.log("obj", todoObj);
+    console.log("title:", todoTitle);
+    console.log("descroption:", todoDescription);
+
     const formBackground = DOMTodoManager.createTodoForm();
     const form = formBackground.querySelector("form");
 
@@ -234,20 +238,42 @@ export class DOMTodoManager {
     const dueDateInput = form.querySelector("#dueDate");
     dueDateInput.value = todoDueDate;
 
-    // TODO: First check how to set the data in type radio inputs
+    // TODO: Implement the priority update too.
+    // First check how to set the data in type radio inputs
     // const priorityInput = form.querySelector("")
+    //
+    //
+    // TODO: Improve: everytime the To-dos are updated, they go all way 
+    // until the bottom.
+    // They should keep their position.
 
     const addTodoButton = form.querySelector(".add-button");
     addTodoButton.textContent = "Confirm";
 
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
+    const cancelButton = document.createElement("button");
+    cancelButton.classList.add("add-button");
+    cancelButton.classList.add("cancel-button");
+    cancelButton.textContent = "Cancel";
+    cancelButton.addEventListener("click", () => {
+      todoHTML.removeChild(form);
+      todoHTML.classList.remove("expanded");
+    })
+
+    const buttonsContainer = document.createElement("div");
+    buttonsContainer.classList.add("buttons-container");
+
+    buttonsContainer.appendChild(cancelButton);
+    buttonsContainer.appendChild(addTodoButton);
+
+    form.addEventListener("submit", (evnt) => {
+      evnt.preventDefault();
       currentList.remove(todoIndex);
       ListStorageController.saveList(currentList.name, currentList);
       DOMTodoManager.retrieveTodoData();
       DOMController.reloadMainContent();
     })
 
+    form.appendChild(buttonsContainer);
 
     todoHTML.classList.add("expanded");
     todoHTML.appendChild(form);

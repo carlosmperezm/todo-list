@@ -14,7 +14,7 @@ export class Todo {
     const priority = obj.piority;
     const isDone = obj.isDone;
 
-    return new Todo(title, description, dueDate, priority, isDone);
+    return new Todo(title, dueDate, description, priority, isDone);
   }
   constructor(title, dueDate, description = "", priority = "medium", isDone = false) {
     this.#title = title;

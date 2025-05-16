@@ -26,3 +26,34 @@
 .action:hover {
   cursor: pointer;
 }
+
+.expanded {
+  position: relative;
+  flex-direction: column;
+  height: fit-content;
+}
+
+.expanded .title-container,
+.expanded .actions-container {
+  display: none;
+}
+
+.expanded .todo-form {
+  position: relative;
+  box-sizing: border-box;
+  background-color: #ddd;
+  width: 100%;
+  padding: 0;
+}
+
+.expanded .todo-form p {
+  height: 20px;
+  margin: 1rem;
+
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+}

@@ -41,6 +41,15 @@ export class ActionButtonsManager {
   }
 
   static #MoreInfoEvent(event) {
+    // CHeck if there is a To-do expanded already
+    const expandedTodo = document.querySelector(".todo-form");
+    if (expandedTodo) {
+      // Cancel that expanded todo before expand a new one
+      const cancelButton = expandedTodo.querySelector(".cancel-button");
+      const clickEvent = new MouseEvent("click");
+      cancelButton.dispatchEvent(clickEvent);
+    }
+    // After checked, expand the current To-do
     const currentTodoHTML = event.target.parentNode.parentNode;
     DOMController.TodoManager.expandTodoInfo(currentTodoHTML);
   }
