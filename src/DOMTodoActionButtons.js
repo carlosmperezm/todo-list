@@ -40,6 +40,11 @@ export class ActionButtonsManager {
 
   }
 
+  static #MoreInfoEvent(event) {
+    const currentTodoHTML = event.target.parentNode.parentNode;
+    DOMController.TodoManager.expandTodoInfo(currentTodoHTML);
+  }
+
 
 
   static loadEvents(todoHTML) {
@@ -49,6 +54,9 @@ export class ActionButtonsManager {
 
     const checkButton = ActionButtonsManager.getCheckButton(todoHTML);
     checkButton.addEventListener("click", ActionButtonsManager.#markDoneEvent);
+
+    const moreInfoButton = ActionButtonsManager.getMoreInfoButton(todoHTML);
+    moreInfoButton.addEventListener("click", ActionButtonsManager.#MoreInfoEvent);
 
   }
 

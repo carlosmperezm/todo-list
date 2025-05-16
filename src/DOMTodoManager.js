@@ -179,8 +179,6 @@ export class DOMTodoManager {
   static removeForm() {
     const form = DOMTodoManager.form;
 
-    console.log(form === null, form);
-
     if (form) {
       console.log("removing form", form)
       form.parentNode.removeChild(form);
@@ -189,7 +187,6 @@ export class DOMTodoManager {
   }
 
   static retrieveTodoData() {
-
     // Get the data
     const title = document.querySelector("#todoTitle").value;
     const description = document.querySelector("#todoDescription").value;
@@ -199,16 +196,61 @@ export class DOMTodoManager {
     // Create a new todo with the data
     const todo = new Todo(title, description, dueDate);
     // Get the current list where user want to add the todo
-    const currentListHTML = DOMController.ListManager.getActiveList();
+    const currentList = ListStorageController.activeList;
+    // Before: const currentListHTML = DOMController.ListManager.getActiveList();
     // Transform the list into a TodoList type
-    const currentListObj = ListStorageController.getList(currentListHTML.name);
-    const currentList = TodoList.from(currentListObj);
+    // Before: const currentListObj = ListStorageController.getList(currentListHTML.name);
+    // Before: const currentList = TodoList.from(currentListObj);
     // Add the new todo to the list
     currentList.add(todo);
     // Save the list in the storage
     ListStorageController.saveList(currentList.name, currentList);
     // Update the todo counter of that list
     DOMController.ListManager.getCounterFromList(currentList.name, currentList.getAll().length);
+
+  }
+
+  static expandTodoInfo(todoHTML) {
+    const todoIndex = todoHTML.dataset.index;
+
+    const currentList = ListStorageController.activeList;
+    const todoObj = currentList.get(todoIndex);
+
+    const todoTitle = todoObj.title;
+    const todoDescription = todoObj.description;
+    const todoDueDate = todoObj.dueDate;
+    const todoIsDone = todoObj.isDone;
+    const todoPriority = todoObj.priority;
+
+    const formBackground = DOMTodoManager.createTodoForm();
+    const form = formBackground.querySelector("form");
+
+    const titleInput = form.querySelector("#todoTitle");
+    titleInput.value = todoTitle;
+
+    const descriptionInput = form.querySelector("#todoDescription");
+    descriptionInput.value = todoDescription;
+
+    const dueDateInput = form.querySelector("#dueDate");
+    dueDateInput.value = todoDueDate;
+
+    // TODO: First check how to set the data in type radio inputs
+    // const priorityInput = form.querySelector("")
+
+    const addTodoButton = form.querySelector(".add-button");
+    addTodoButton.textContent = "Confirm";
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      currentList.remove(todoIndex);
+      ListStorageController.saveList(currentList.name, currentList);
+      DOMTodoManager.retrieveTodoData();
+      DOMController.reloadMainContent();
+    })
+
+
+    todoHTML.classList.add("expanded");
+    todoHTML.appendChild(form);
 
   }
 

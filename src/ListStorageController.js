@@ -22,8 +22,8 @@ export class ListStorageController {
     return lists;
   }
 
-  static getAllTodosFrom(name) {
-    const listJSON = JSON.parse(localStorage.getItem(name.toLowerCase()));
+  static getAllTodosFrom(listName) {
+    const listJSON = JSON.parse(localStorage.getItem(listName.toLowerCase()));
     return TodoList.from(listJSON).getAll();
   }
 
@@ -77,12 +77,12 @@ export class ListStorageController {
     ListStorageController.saveList(list.name, list);
   }
 
-  static markDone(listName,todoIndex){
+  static markDone(listName, todoIndex) {
     // get the list and parse it into a TodoList object
     const list = TodoList.from(ListStorageController.getList(listName));
 
     // get the todo
-    const todoObj = list.get(todoIndex) ;
+    const todoObj = list.get(todoIndex);
 
     // delete the todo from the list since i cant be changed
     // instead we'll create a new one and add it to the end of the list
@@ -98,7 +98,7 @@ export class ListStorageController {
     list.add(todo);
 
     // save the list
-    ListStorageController.saveList(list.name,list);
+    ListStorageController.saveList(list.name, list);
 
   }
 
