@@ -26,6 +26,7 @@ export class DOMListManager {
     const listName = document.createElement("input")
     listName.placeholder = "List Name";
     listName.name = "listName";
+    listName.maxLength = 20;
 
     const submitButton = document.createElement("button");
     submitButton.textContent = "Create";

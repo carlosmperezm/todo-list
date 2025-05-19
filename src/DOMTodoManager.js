@@ -122,6 +122,7 @@ export class DOMTodoManager {
     titleInput.name = "todoTitle";
     titleInput.required = true;
     titleInput.placeholder = "Ex: Pick up mom from the airport";
+    titleInput.maxLength = 30;
 
     const descriptionContainer = document.createElement("p");
     const descriptionLabel = document.createElement("label");

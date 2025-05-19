@@ -9,7 +9,6 @@ function loadContent() {
 
   // Make sure there's an active list before load the main content
   const activeList = DOMController.ListManager.getActiveList();
-  console.log("activeList:",activeList);
   // If there is no active list after the DOM loads
   if (activeList === null) {
     // then set the list Personal by default
