@@ -14,12 +14,9 @@ import { ActionButtonsManager } from "./DOMTodoActionButtons";
 
 
 export class DOMTodoManager {
-  static #mainPanel = document.querySelector(".main-panel");
-  static #sidePanel = document.querySelector(".side-panel");
   static #listStorage = ListStorageController;
   static #form = DOMTodoManager.createTodoForm();
   static #actionButtons = ActionButtonsManager;
-  static #todo;
 
   static loadEvents = DOMTodoManager.actionButtons.loadEvents;
 
@@ -225,7 +222,8 @@ export class DOMTodoManager {
     dueDateInput.value = todoDueDate;
 
     const priorityInput = form.querySelector(`input[value='${todoPriority}']`);
-    priorityInput.checked = true;
+    if (priorityInput)
+      priorityInput.checked = true;
 
     const addTodoButton = form.querySelector(".add-button");
     addTodoButton.textContent = "Confirm";
