@@ -33,6 +33,9 @@ export class TodoList {
   add(newTodo) {
     this.#todos.push(newTodo);
   }
+  insert(newTodo, index) {
+    this.#todos.splice(index, 0, newTodo);
+  }
   remove(todoIndex) {
     this.#todos.splice(todoIndex, 1);
   }

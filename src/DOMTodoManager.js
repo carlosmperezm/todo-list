@@ -55,8 +55,8 @@ export class DOMTodoManager {
 
     dateContainer.classList.add("date-container");
 
-    todo.dueDate ?
-      date.textContent = todo.dueDate
+    todo.dueDate
+      ? date.textContent = todo.dueDate
       : date.textContent = "Whenever you want😝";
 
     title.classList.add('todo-title');
@@ -184,7 +184,6 @@ export class DOMTodoManager {
     const form = DOMTodoManager.form;
 
     if (form) {
-      console.log("removing form", form)
       form.parentNode.removeChild(form);
     }
 
@@ -201,10 +200,6 @@ export class DOMTodoManager {
     const todo = new Todo(title, dueDate, description, priority);
     // Get the current list where user want to add the todo
     const currentList = ListStorageController.activeList;
-    // Before: const currentListHTML = DOMController.ListManager.getActiveList();
-    // Transform the list into a TodoList type
-    // Before: const currentListObj = ListStorageController.getList(currentListHTML.name);
-    // Before: const currentList = TodoList.from(currentListObj);
     // Add the new todo to the list
     currentList.add(todo);
     // Save the list in the storage
@@ -223,12 +218,7 @@ export class DOMTodoManager {
     const todoTitle = todoObj.title;
     const todoDescription = todoObj.description;
     const todoDueDate = todoObj.dueDate;
-    const todoIsDone = todoObj.isDone;
     const todoPriority = todoObj.priority;
-
-    console.log("obj", todoObj);
-    console.log("title:", todoTitle);
-    console.log("descroption:", todoDescription);
 
     const formBackground = DOMTodoManager.createTodoForm();
     const form = formBackground.querySelector("form");
@@ -265,9 +255,24 @@ export class DOMTodoManager {
 
     form.addEventListener("submit", (evnt) => {
       evnt.preventDefault();
+      // remove the old to-do from the list
       currentList.remove(todoIndex);
+      // Save the list in the storage
       ListStorageController.saveList(currentList.name, currentList);
-      DOMTodoManager.retrieveTodoData();
+
+      // Get the data from the buttons
+      const title = document.querySelector("#todoTitle").value;
+      const description = document.querySelector("#todoDescription").value;
+      const dueDate = document.querySelector("#dueDate").value;
+      const priority = document.querySelector("input[name='todoPriority']:checked").value;
+
+      // Create a new todo with the data
+      const todo = new Todo(title, dueDate, description, priority);
+      // Add the new todo to the list
+      currentList.insert(todo, todoIndex);
+      // Save the list in the storage
+      ListStorageController.saveList(currentList.name, currentList);
+      // reload the content
       DOMController.reloadMainContent();
     })
 
