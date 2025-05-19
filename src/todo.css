@@ -48,7 +48,11 @@
 }
 
 .expanded .title-container,
-.expanded .actions-container {
+.expanded .date-container {
+  display: none;
+}
+
+.expanded:hover .actions-container {
   display: none;
 }
 
