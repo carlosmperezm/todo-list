@@ -6,14 +6,8 @@ export class ActionButtonsManager {
   static getDeleteButton(todoHTML) {
     return todoHTML.querySelector(".delete-action");
   }
-  static getMoveButton(todoHTML) {
-    return todoHTML.querySelector(".delete-action");
-  }
   static getEditButton(todoHTML) {
-    return todoHTML.querySelector(".delete-action");
-  }
-  static getMoreInfoButton(todoHTML) {
-    return todoHTML.querySelector(".moreInfo-action");
+    return todoHTML.querySelector(".edit-action");
   }
   static getCheckButton(todoHTML) {
     return todoHTML.querySelector(".check-action");
@@ -64,8 +58,8 @@ export class ActionButtonsManager {
     const checkButton = ActionButtonsManager.getCheckButton(todoHTML);
     checkButton.addEventListener("click", ActionButtonsManager.#markDoneEvent);
 
-    const moreInfoButton = ActionButtonsManager.getMoreInfoButton(todoHTML);
-    moreInfoButton.addEventListener("click", ActionButtonsManager.#MoreInfoEvent);
+    const moreEditButton = ActionButtonsManager.getEditButton(todoHTML);
+    moreEditButton.addEventListener("click", ActionButtonsManager.#MoreInfoEvent);
 
   }
 

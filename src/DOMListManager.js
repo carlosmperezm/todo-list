@@ -111,21 +111,34 @@ export class DOMListManager {
   }
 
   static loadAllTodosFromActiveList() {
-    const activeListHTML = DOMListManager.getActiveList();
-    const activeListObj = ListStorageController.getList(activeListHTML.name);
-    const activeList = TodoList.from(activeListObj);
+    // const activeListHTML = DOMListManager.getActiveList();
+    // const activeListObj = ListStorageController.getList(activeListHTML.name);
+    // const activeList = TodoList.from(activeListObj);
+    const activeList = ListStorageController.activeList;
 
     DOMListManager.setCounterOfTodos(activeList.name, activeList.getAll().length);
 
     let index = 0;
+    const todosHTMLMarkedAsDone = [];
+
     ListStorageController.getAllTodosFrom(activeList.name).forEach(todoJSON => {
       const todo = Todo.from(todoJSON);
       const todoHTML = DOMController.TodoManager.createTodo(todo);
+
       todoHTML.dataset.index = index;
       todoHTML.dataset.done = todo.isDone;
+
       index++;
-      DOMListManager.#mainPanel.appendChild(todoHTML);
-    })
+
+      if (!todo.isDone)
+        DOMListManager.#mainPanel.appendChild(todoHTML);
+      else {
+        todosHTMLMarkedAsDone.push(todoHTML);
+      }
+
+    });
+    todosHTMLMarkedAsDone.forEach(todoHTML =>
+      DOMListManager.#mainPanel.appendChild(todoHTML));
 
   }
 

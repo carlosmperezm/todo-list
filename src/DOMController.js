@@ -89,8 +89,6 @@ export class DOMController {
 
     DOMController.getAddTodoButton().addEventListener("click", () =>
       DOMController.TodoManager.loadForm())
-
-    console.log("Main content reloaded")
   }
 
   static reloadSideContent() {
@@ -112,11 +110,9 @@ export class DOMController {
 
     DOMController.getAddListButton().addEventListener("click", () =>
       DOMController.ListManager.loadForm())
-
-    console.log("Side content reloaded")
   }
 
-  static loadSideContent(){
+  static loadSideContent() {
     // 3. Reload all the lists from the Storage
     ListStorageController.getAllLists().forEach(list => {
       DOMController.ListManager.loadList(list.name);
@@ -126,12 +122,9 @@ export class DOMController {
 
     DOMController.getAddListButton().addEventListener("click", () =>
       DOMController.ListManager.loadForm())
-
-    console.log("Side content loaded")
-
   }
 
-  static loadMainContent(){
+  static loadMainContent() {
     // Load all todos
     DOMController.ListManager.loadAllTodosFromActiveList();
     // Load the button again
@@ -139,8 +132,6 @@ export class DOMController {
 
     DOMController.getAddTodoButton().addEventListener("click", () =>
       DOMController.TodoManager.loadForm())
-
-    console.log("Main content loaded")
   }
 
 

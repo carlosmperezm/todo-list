@@ -2,15 +2,12 @@ import "./todo.css";
 import "./form.css";
 
 import checkSvg from "./assets/icons/check.svg";
-import infoSvg from "./assets/icons/info.svg";
-import moveSvg from "./assets/icons/move.svg";
 import trashSvg from "./assets/icons/trash.svg";
 import editSvg from "./assets/icons/edit.svg";
 
 import { ListStorageController } from "./ListStorageController";
 import { DOMController } from "./DOMController";
 import { Todo } from "./Todo";
-import { TodoList } from "./TodosList";
 import { ActionButtonsManager } from "./DOMTodoActionButtons";
 
 
@@ -43,7 +40,6 @@ export class DOMTodoManager {
     const actionsContainer = document.createElement("div");
     const title = document.createElement("span");
     const checkAction = document.createElement("img");
-    const moreInfoAction = document.createElement("img");
     const deleteAction = document.createElement("img");
     const editAction = document.createElement("img");
 
@@ -66,10 +62,6 @@ export class DOMTodoManager {
     checkAction.classList.add('action');
     checkAction.src = checkSvg;
 
-    moreInfoAction.classList.add('moreInfo-action');
-    moreInfoAction.classList.add('action');
-    moreInfoAction.src = infoSvg;
-
     deleteAction.classList.add('delete-action');
     deleteAction.classList.add('action');
     deleteAction.src = trashSvg;
@@ -84,7 +76,6 @@ export class DOMTodoManager {
     dateContainer.appendChild(date);
 
     actionsContainer.appendChild(checkAction);
-    actionsContainer.appendChild(moreInfoAction);
     actionsContainer.appendChild(editAction);
     actionsContainer.appendChild(deleteAction);
 
