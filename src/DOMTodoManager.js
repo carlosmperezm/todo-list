@@ -191,10 +191,10 @@ export class DOMTodoManager {
     const title = document.querySelector("#todoTitle").value;
     const description = document.querySelector("#todoDescription").value;
     const dueDate = document.querySelector("#dueDate").value;
-    // const piority = document.querySelector("#todo");
+    const priority = document.querySelector("input[name='todoPriority']:checked").value;
 
     // Create a new todo with the data
-    const todo = new Todo(title, dueDate, description);
+    const todo = new Todo(title, dueDate, description, priority);
     // Get the current list where user want to add the todo
     const currentList = ListStorageController.activeList;
     // Before: const currentListHTML = DOMController.ListManager.getActiveList();
@@ -238,13 +238,16 @@ export class DOMTodoManager {
     const dueDateInput = form.querySelector("#dueDate");
     dueDateInput.value = todoDueDate;
 
-    // TODO: Implement the priority update too.
-    // First check how to set the data in type radio inputs
-    // const priorityInput = form.querySelector("")
+    const priorityInput = form.querySelector(`input[value='${todoPriority}']`);
+    console.log("priority from the Todo Obj:", todoPriority)
+    priorityInput.checked = true;
+    console.log("radio button value: ", priorityInput.value);
+
+
     //
     //
     // TODO: Improve: everytime the To-dos are updated, they go all way 
-    // until the bottom.
+    // to the bottom.
     // They should keep their position.
 
     const addTodoButton = form.querySelector(".add-button");
