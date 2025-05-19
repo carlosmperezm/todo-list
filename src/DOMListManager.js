@@ -1,3 +1,5 @@
+import trashSvg from "./assets/icons/trash.svg";
+
 import { TodoList } from "./TodosList";
 import { Todo } from "./Todo";
 
@@ -87,6 +89,7 @@ export class DOMListManager {
     const listName = document.createElement("span");
     const counterContainer = document.createElement("span");
     const counter = document.createElement("span");
+    const deleteButton = document.createElement("img");
 
     listNameContainer.classList.add("list-name-container")
     listNameContainer.dataset.active = todoList.active;
@@ -98,10 +101,18 @@ export class DOMListManager {
     counterContainer.classList.add("counter-container");
     counter.textContent = todoList.getAll().length;
 
+    deleteButton.classList.add('delete-action');
+    deleteButton.src = trashSvg;
+    deleteButton.addEventListener("click", () => {
+      ListStorageController.removeList(todoList.name.toLowerCase());
+      DOMController.reloadSideContent();
+    })
+
     counterContainer.appendChild(counter);
 
     listNameContainer.appendChild(listName);
     listNameContainer.appendChild(counterContainer);
+    listNameContainer.appendChild(deleteButton);
 
     return listNameContainer;
   }
@@ -111,9 +122,6 @@ export class DOMListManager {
   }
 
   static loadAllTodosFromActiveList() {
-    // const activeListHTML = DOMListManager.getActiveList();
-    // const activeListObj = ListStorageController.getList(activeListHTML.name);
-    // const activeList = TodoList.from(activeListObj);
     const activeList = ListStorageController.activeList;
 
     DOMListManager.setCounterOfTodos(activeList.name, activeList.getAll().length);

@@ -102,5 +102,8 @@ export class ListStorageController {
 
   }
 
+  static removeList(listName) {
+    localStorage.removeItem(listName);
+  }
 
 }

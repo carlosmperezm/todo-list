@@ -24,3 +24,15 @@
 .list-name-container[data-active=true] {
   background-color: var(--color4);
 }
+
+.list-name-container .delete-action {
+  display: none;
+}
+
+.list-name-container:hover .delete-action {
+  display: block;
+}
+
+.list-name-container:hover .counter-container {
+  display: none;
+}
