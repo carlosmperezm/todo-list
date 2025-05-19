@@ -38,11 +38,12 @@ export class DOMTodoManager {
   static createTodo(todo) {
     const todoContainer = document.createElement("div");
     const titleContainer = document.createElement("div");
+    const dateContainer = document.createElement("div");
+    const date = document.createElement("span");
     const actionsContainer = document.createElement("div");
     const title = document.createElement("span");
     const checkAction = document.createElement("img");
     const moreInfoAction = document.createElement("img");
-    const moveAction = document.createElement("img");
     const deleteAction = document.createElement("img");
     const editAction = document.createElement("img");
 
@@ -52,9 +53,14 @@ export class DOMTodoManager {
 
     actionsContainer.classList.add('actions-container');
 
+    dateContainer.classList.add("date-container");
+
+    todo.dueDate ?
+      date.textContent = todo.dueDate
+      : date.textContent = "Whenever you want😝";
+
     title.classList.add('todo-title');
     title.textContent = todo.title;
-
 
     checkAction.classList.add('check-action');
     checkAction.classList.add('action');
@@ -63,10 +69,6 @@ export class DOMTodoManager {
     moreInfoAction.classList.add('moreInfo-action');
     moreInfoAction.classList.add('action');
     moreInfoAction.src = infoSvg;
-
-    moveAction.classList.add('move-action');
-    moveAction.classList.add('action');
-    moveAction.src = moveSvg;
 
     deleteAction.classList.add('delete-action');
     deleteAction.classList.add('action');
@@ -79,13 +81,15 @@ export class DOMTodoManager {
 
     titleContainer.appendChild(title);
 
+    dateContainer.appendChild(date);
+
     actionsContainer.appendChild(checkAction);
     actionsContainer.appendChild(moreInfoAction);
     actionsContainer.appendChild(editAction);
-    actionsContainer.appendChild(moveAction);
     actionsContainer.appendChild(deleteAction);
 
     todoContainer.appendChild(titleContainer);
+    todoContainer.appendChild(dateContainer);
     todoContainer.appendChild(actionsContainer);
 
 
@@ -239,16 +243,7 @@ export class DOMTodoManager {
     dueDateInput.value = todoDueDate;
 
     const priorityInput = form.querySelector(`input[value='${todoPriority}']`);
-    console.log("priority from the Todo Obj:", todoPriority)
     priorityInput.checked = true;
-    console.log("radio button value: ", priorityInput.value);
-
-
-    //
-    //
-    // TODO: Improve: everytime the To-dos are updated, they go all way 
-    // to the bottom.
-    // They should keep their position.
 
     const addTodoButton = form.querySelector(".add-button");
     addTodoButton.textContent = "Confirm";

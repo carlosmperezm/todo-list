@@ -8,16 +8,30 @@
   padding: 5px;
 }
 
+.todo-container:hover .actions-container {
+  display: flex;
+
+}
+
+.todo-container:hover .date-container {
+  display: none;
+}
+
 .title-container {
   display: grid;
   place-items: center;
 }
 
+.date-container {
+  display: flex;
+  place-self: center;
+}
 
 .actions-container {
-  display: flex;
   gap: 10px;
+  display: none;
 }
+
 
 .action {
   width: 30px;
