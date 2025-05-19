@@ -5,6 +5,8 @@ import plusIcon from "./assets/icons/plus.svg";
 import { DOMListManager } from "./DOMListManager";
 import { DOMTodoManager } from "./DOMTodoManager";
 import { ListStorageController } from "./ListStorageController";
+import { TodoList } from "./TodosList";
+import { Todo } from "./Todo";
 
 export class DOMController {
   static #mainPanel = document.querySelector(".main-panel");
@@ -136,24 +138,27 @@ export class DOMController {
 
 
   static loadDefaultLists() {
-    const personalList = new TodoList("Personal")
-    const workList = new TodoList("Work");
-    const schoolList = new TodoList("School");
 
-    workList.active = true;
+    const personalList = new TodoList("personal")
+    const workList = new TodoList("work");
+    const schoolList = new TodoList("school");
+
+    const todo1 = new Todo("Pick up Mom");
+    const todo2 = new Todo("Do the landry");
+    const todo3 = new Todo("Call granma");
+    const todo4 = new Todo("Fix some bugs");
+    const todo5 = new Todo("Do school homework");
+
+    personalList.add(todo1);
+    personalList.add(todo2);
+    personalList.add(todo3);
+    workList.add(todo4);
+    schoolList.add(todo5);
 
     ListStorageController.saveList(personalList.name, personalList);
     ListStorageController.saveList(workList.name, workList);
     ListStorageController.saveList(schoolList.name, schoolList);
 
-    const personalListHTML = DOMController.createSideListElement(personalList);
-    const workListHTML = DOMController.createSideListElement(workList);
-    const schoolListHTML = DOMController.createSideListElement(schoolList);
-
-
-    sidePanel.appendChild(personalListHTML);
-    sidePanel.appendChild(workListHTML);
-    sidePanel.appendChild(schoolListHTML);
   }
 
 }

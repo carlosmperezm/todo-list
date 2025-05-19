@@ -5,6 +5,13 @@ import { DOMController } from "./DOMController.js";
 
 
 function loadContent() {
+  if (localStorage.length < 1) {
+    console.log("wiijjl");
+    DOMController.loadDefaultLists();
+
+  }
+
+
   DOMController.loadSideContent();
 
   // Make sure there's an active list before load the main content
@@ -18,6 +25,7 @@ function loadContent() {
   }
 
   DOMController.sidePanel.addEventListener("click", (evt) => {
+    console.log("name of evt: ", evt.target.nodeName)
     if (evt.target.className === "list-name-container") {
       const activeListHTML = DOMController.ListManager.getActiveList();
       ListStorageController.toggleActive(activeListHTML.name);
@@ -29,6 +37,22 @@ function loadContent() {
 
       DOMController.reloadMainContent();
     }
+    else if (evt.target.parentNode.className === "list-name-container"
+      && evt.target.nodeName !== "IMG") {
+      const activeListHTML = DOMController.ListManager.getActiveList();
+      ListStorageController.toggleActive(activeListHTML.name);
+      DOMController.ListManager.toggleActive(activeListHTML);
+
+      ListStorageController.setActiveList(evt.target.parentNode.name);
+      ListStorageController.setInactiveAllListBut(evt.target.parentNode.name);
+      DOMController.ListManager.toggleActive(evt.target.parentNode);
+
+      DOMController.reloadMainContent();
+
+    }
+    console.log("did not work");
+    console.log("target:", evt.target);
+    console.log("equal?:", evt.target.className == "list-name-container");
 
   })
 
@@ -56,7 +80,6 @@ function loadContent() {
     // // After the data is precessed reload the main content
     DOMController.reloadMainContent();
   });
-
 }
 
 
